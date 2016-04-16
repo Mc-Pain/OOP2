@@ -10,21 +10,24 @@ using System.Windows.Forms;
 
 namespace OOP2
 {
-    public class Lelement //абстрактный класс элемента контейнера - число либо строка
+    public abstract class Lelement //абстрактный класс элемента контейнера - число либо строка
     {
-        public abstract void* GetPtr(); //возвращает указатель на экземпляр классов-потомков, метод будет перекрыт
+        public abstract Lelement GetInst(); //возвращает экземпляр классов-потомков, метод будет перекрыт
     };
 
-    public class Lnumber : Lelement //число - абстрактный класс. Мы не знаем, что там будет: int или double
+    public abstract class Lnumber : Lelement //число - абстрактный класс. Мы не знаем, что там будет: int или double
     {
-        //Тут ничего нет... Пока что
+        public override abstract Lelement GetInst(); //возвращает экземпляр классов-потомков, метод будет перекрыт
     }
 
     public class Lint : Lnumber
     {
         int number;
 
-        public Lint(); //нуль-конструктор
+        public Lint() //нуль-конструктор
+        {
+            number = 0;
+        }
         public Lint(int num) //конструктор общего вида
         {
             number = num;
@@ -42,7 +45,7 @@ namespace OOP2
         {
             return number;
         }
-        public Lint GetPtr()
+        public override Lelement GetInst()
         {
             return this;
         }
@@ -52,7 +55,10 @@ namespace OOP2
     {
         double number;
 
-        public Ldouble(); //нуль-конструктор
+        public Ldouble() //нуль-конструктор
+        {
+            number = 0;
+        }
         public Ldouble(double num) //конструктор общего вида
         {
             number = num;
@@ -70,7 +76,38 @@ namespace OOP2
         {
             return number;
         }
-        public Ldouble GetPtr()
+        public override Lelement GetInst()
+        {
+            return this;
+        }
+    }
+
+    public class Lstring : Lelement
+    {
+        string text;
+
+        public Lstring() //конструктор по умолчанию
+        {
+            text = "";
+        }
+        public Lstring(string customtext) //конструктор общего вида
+        {
+            text = customtext;
+        }
+        public Lstring(Lstring Lstring_old) //Конструктор копирования
+        {
+            text = Lstring_old.text;
+        }
+
+        public void Set(string customtext)
+        {
+            text = customtext;
+        }
+        public string Get()
+        {
+            return text;
+        }
+        public override Lelement GetInst()
         {
             return this;
         }
