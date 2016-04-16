@@ -17,9 +17,67 @@ namespace OOP2
             InitializeComponent();
         }
 
+        List<Lelement> container = new List<Lelement>(); //наш контейнер
+
+        int checktype(string a, string b)
+        {
+            if (a == "" && b == "")
+                return 0;
+            if (a == "" && b != "")
+            {
+                string c = b;
+                b = a;
+                a = c;
+                return 1;
+            }
+            if (b == "")
+            {
+                string c = b;
+                b = a;
+                a = c;
+                return 1;
+            }
+            return 2;
+        }
+
+        private void Addbtn_Click(object sender, EventArgs e)
+        {
+            if (checktype(First_textbox.Text, Second_textbox.Text) == 0)
+                Statelabel.Text = "Оба поля пусты. Добавлять нечего";
+            if (checktype(First_textbox.Text, Second_textbox.Text) == 1)
+            {
+                int temp_int;
+                double temp_double;
+                if (!int.TryParse(First_textbox.Text, out temp_int))
+                { //это не int
+                    if (!double.TryParse(First_textbox.Text, out temp_double))
+                    { //это не double
+                        container.Add(new Lstring(First_textbox.Text));
+                        ElementsCombo.Items.Add(string.Format("\"{0}\"", First_textbox.Text));
+                        Statelabel.Text = String.Format("Добавленные элементы:\nСтрока: \"{0}\"", First_textbox.Text);
+                    }
+                    else
+                    { //это double
+                        container.Add(new Ldouble(temp_double));
+                        ElementsCombo.Items.Add(string.Format("{0}", temp_double));
+                        Statelabel.Text = String.Format("Добавленные элементы:\nЧисло с плавающей запятой: {0}", temp_double);
+                    }
+                }
+                else
+                { //это int
+                    container.Add(new Lint(temp_int));
+                    ElementsCombo.Items.Add(string.Format("{0}", temp_int));
+                    Statelabel.Text = String.Format("Добавленные элементы:\nЦелое число: {0}", temp_int);
+                }
+            }
+            if (checktype(First_textbox.Text, Second_textbox.Text) == 2)
+            {
+                int temp_int, temp2_int;
+                double temp_double, temp2_double;
+            }
+        }
+
         /* TODO:
-         * Запилить класс "Элемент контейнера"
-         * Запилить производные классы "число", "строка", "структура {элемент, элемент}" - инсепшон!
          * Организовать добавление/извлечение элементов из контейнера
          * */
     }
@@ -116,4 +174,58 @@ namespace OOP2
         }
     }
 
+    public class Lstruct2 : Lelement
+    {
+        Lelement first;
+        Lelement second;
+
+        //щас будет быдлокод
+        public Lstruct2(int first, int second)
+        {
+            this.first = new Lint(first);
+            this.second = new Lint(second);
+        }
+        public Lstruct2(int first, double second)
+        {
+            this.first = new Lint(first);
+            this.second = new Ldouble(second);
+        }
+        public Lstruct2(int first, string second)
+        {
+            this.first = new Lint(first);
+            this.second = new Lstring(second);
+        }
+
+        public Lstruct2(double first, int second)
+        {
+            this.first = new Ldouble(first);
+            this.second = new Lint(second);
+        }
+        public Lstruct2(double first, double second)
+        {
+            this.first = new Ldouble(first);
+            this.second = new Ldouble(second);
+        }
+        public Lstruct2(double first, string second)
+        {
+            this.first = new Ldouble(first);
+            this.second = new Lstring(second);
+        }
+
+        public Lstruct2(string first, int second)
+        {
+            this.first = new Lstring(first);
+            this.second = new Lint(second);
+        }
+        public Lstruct2(string first, double second)
+        {
+            this.first = new Lstring(first);
+            this.second = new Ldouble(second);
+        }
+        public Lstruct2(string first, string second)
+        {
+            this.first = new Lstring(first);
+            this.second = new Lstring(second);
+        }
+    }
 }
