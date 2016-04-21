@@ -74,17 +74,61 @@ namespace OOP2
             {
                 int temp_int, temp2_int;
                 double temp_double, temp2_double;
+                Lelement first, second;
+                // Быдлокод тайм!
+
+                if (!int.TryParse(First_textbox.Text, out temp_int))
+                { //это не int
+                    if (!double.TryParse(First_textbox.Text, out temp_double))
+                    { //это не double
+                        first = new Lstring(First_textbox.Text);
+                        Statelabel.Text = String.Format("Добавленные элементы:\nСтрока: \"{0}\"", First_textbox.Text);
+                    }
+                    else
+                    { //это double
+                        first = new Ldouble(temp_double);
+                        Statelabel.Text = String.Format("Добавленные элементы:\nЧисло с плавающей запятой: {0}", temp_double);
+                    }
+                }
+                else
+                { //это int
+                    first = new Lint(temp_int);
+                    Statelabel.Text = String.Format("Добавленные элементы:\nЦелое число: {0}", temp_int);
+                }
+
+                Statelabel.Text += "\n";
+
+                if (!int.TryParse(Second_textbox.Text, out temp2_int))
+                { //это не int
+                    if (!double.TryParse(Second_textbox.Text, out temp2_double))
+                    { //это не double
+                        second = new Lstring(Second_textbox.Text);
+                        Statelabel.Text += String.Format("Строка: \"{0}\"", Second_textbox.Text);
+                    }
+                    else
+                    { //это double
+                        second = new Ldouble(temp2_double);
+                        Statelabel.Text += String.Format("Число с плавающей запятой: {0}", temp2_double);
+                    }
+                }
+                else
+                { //это int
+                    second = new Lint(temp_int);
+                    Statelabel.Text += String.Format("Целое число: {0}", temp2_int);
+                }
+                container.Add(new Lstruct2(first, second));
+                ElementsCombo.Items.Add(string.Format("{0}, {1}", First_textbox.Text, Second_textbox.Text));
             }
         }
 
         /* TODO:
-         * Организовать добавление/извлечение элементов из контейнера
+         * Организовать извлечение элементов из контейнера
          * */
     }
 
     public abstract class Lelement //абстрактный класс элемента контейнера - число либо строка
     {
-        //public abstract void Get(); //возвращает значение
+        public abstract string Get(); //возвращает значение
         //public abstract void Set(); //Задает значение
     }
 
@@ -114,9 +158,9 @@ namespace OOP2
         {
             this.number = num;
         }
-        public int Get() //Получение значения
+        public override string Get() //Получение значения
         {
-            return this.number;
+            return Convert.ToString(this.number);
         }
     }
 
@@ -141,9 +185,9 @@ namespace OOP2
         {
             this.number = num;
         }
-        public double Get() //Получение значения
+        public override string Get() //Получение значения
         {
-            return this.number;
+            return Convert.ToString(this.number);
         }
     }
 
@@ -168,7 +212,7 @@ namespace OOP2
         {
             this.text = customtext;
         }
-        public string Get()
+        public override string Get()
         {
             return this.text;
         }
@@ -179,53 +223,22 @@ namespace OOP2
         Lelement first;
         Lelement second;
 
-        //щас будет быдлокод
-        public Lstruct2(int first, int second)
+        public Lstruct2(Lelement first, Lelement second)
         {
-            this.first = new Lint(first);
-            this.second = new Lint(second);
-        }
-        public Lstruct2(int first, double second)
-        {
-            this.first = new Lint(first);
-            this.second = new Ldouble(second);
-        }
-        public Lstruct2(int first, string second)
-        {
-            this.first = new Lint(first);
-            this.second = new Lstring(second);
+            this.first = first;
+            this.second = second;
         }
 
-        public Lstruct2(double first, int second)
+        //что-то тлен
+
+        /*public override string Get()
         {
-            this.first = new Ldouble(first);
-            this.second = new Lint(second);
-        }
-        public Lstruct2(double first, double second)
-        {
-            this.first = new Ldouble(first);
-            this.second = new Ldouble(second);
-        }
-        public Lstruct2(double first, string second)
-        {
-            this.first = new Ldouble(first);
-            this.second = new Lstring(second);
+            return first.Get();
         }
 
-        public Lstruct2(string first, int second)
+        public string Get(bool t)
         {
-            this.first = new Lstring(first);
-            this.second = new Lint(second);
-        }
-        public Lstruct2(string first, double second)
-        {
-            this.first = new Lstring(first);
-            this.second = new Ldouble(second);
-        }
-        public Lstruct2(string first, string second)
-        {
-            this.first = new Lstring(first);
-            this.second = new Lstring(second);
-        }
+            return second.Get();
+        }*/
     }
 }
