@@ -17,7 +17,7 @@ namespace OOP2
             InitializeComponent();
         }
 
-        List<Lelement> container = new List<Lelement>(); //наш контейнер
+        List<Lall> container = new List<Lall>(); //наш контейнер
 
         int checktype(string a, string b)
         {
@@ -54,7 +54,7 @@ namespace OOP2
                     { //это не double
                         container.Add(new Lstring(First_textbox.Text));
                         ElementsCombo.Items.Add(string.Format("\"{0}\"", First_textbox.Text));
-                        Statelabel.Text = String.Format("Добавленные элементы:\nСтрока: \"{0}\"", First_textbox.Text);
+                        Statelabel.Text = String.Format("Добавленные элементы:\nСтрока: {0}", First_textbox.Text);
                     }
                     else
                     { //это double
@@ -75,14 +75,14 @@ namespace OOP2
                 int temp_int, temp2_int;
                 double temp_double, temp2_double;
                 Lelement first, second;
-                // Быдлокод тайм!
+                // Быдлокод тайм! TODO: оформить в функцию
 
                 if (!int.TryParse(First_textbox.Text, out temp_int))
                 { //это не int
                     if (!double.TryParse(First_textbox.Text, out temp_double))
                     { //это не double
                         first = new Lstring(First_textbox.Text);
-                        Statelabel.Text = String.Format("Добавленные элементы:\nСтрока: \"{0}\"", First_textbox.Text);
+                        Statelabel.Text = String.Format("Добавленные элементы:\nСтрока: {0}", First_textbox.Text);
                     }
                     else
                     { //это double
@@ -103,7 +103,7 @@ namespace OOP2
                     if (!double.TryParse(Second_textbox.Text, out temp2_double))
                     { //это не double
                         second = new Lstring(Second_textbox.Text);
-                        Statelabel.Text += String.Format("Строка: \"{0}\"", Second_textbox.Text);
+                        Statelabel.Text += String.Format("Строка: {0}", Second_textbox.Text);
                     }
                     else
                     { //это double
@@ -121,15 +121,35 @@ namespace OOP2
             }
         }
 
+        private void Extractbtn_Click(object sender, EventArgs e)
+        {
+            Lall current = container.ElementAt<Lall>(ElementsCombo.SelectedIndex);
+            Statelabel.Text = "Извлеченные элементы:\n";
+            if (current.Get_Count() == 1)
+            {
+                Statelabel.Text += String.Format("{0}: {1}", current.Get_Type(), current.Get());
+            }
+            if (current.Get_Count() == 2)
+            {
+                Statelabel.Text += String.Format("{0}: {1}", current.Get_Type(0), current.Get(0));
+                Statelabel.Text += String.Format("{0}: {1}", current.Get_Type(1), current.Get(1));
+            }
+        }
+
         /* TODO:
          * Организовать извлечение элементов из контейнера
          * */
     }
 
-    public abstract class Lelement //абстрактный класс элемента контейнера - число либо строка
+    public abstract class Lall //абстрактный класс элементов и структур элементов
+    {
+        public abstract int Get_Count();
+    }
+
+    public abstract class Lelement : Lall //абстрактный класс элемента контейнера - число либо строка
     {
         public abstract string Get(); //возвращает значение
-        //public abstract void Set(); //Задает значение
+        public abstract string Get_Type();
     }
 
     public abstract class Lnumber : Lelement //число - абстрактный класс. Мы не знаем, что там будет: int или double
@@ -140,6 +160,18 @@ namespace OOP2
     public class Lint : Lnumber
     {
         int number;
+        int elements = 1;
+        string type = "Целое число";
+
+        public override int Get_Count()
+        {
+            return elements;
+        }
+
+        public override string Get_Type()
+        {
+            return type;
+        }
 
         public Lint() //нуль-конструктор
         {
@@ -162,11 +194,27 @@ namespace OOP2
         {
             return Convert.ToString(this.number);
         }
+        public int GetVal()
+        {
+            return this.number;
+        }
     }
 
     public class Ldouble : Lnumber
     {
         double number;
+        int elements = 1;
+        string type = "Число с плавающей запятой";
+
+        public override int Get_Count()
+        {
+            return elements;
+        }
+
+        public override string Get_Type()
+        {
+            return type;
+        }
 
         public Ldouble() //нуль-конструктор
         {
@@ -189,11 +237,27 @@ namespace OOP2
         {
             return Convert.ToString(this.number);
         }
+        public double GetVal()
+        {
+            return this.number;
+        }
     }
 
     public class Lstring : Lelement
     {
         string text;
+        int elements = 1;
+        string type = "Строка:";
+
+        public override int Get_Count()
+        {
+            return elements;
+        }
+
+        public override string Get_Type()
+        {
+            return type;
+        }
 
         public Lstring() //конструктор по умолчанию
         {
@@ -216,12 +280,22 @@ namespace OOP2
         {
             return this.text;
         }
+        public string GetVal()
+        {
+            return this.text;
+        }
     }
 
-    public class Lstruct2 : Lelement
+    public class Lstruct2 : Lall
     {
         Lelement first;
         Lelement second;
+        int elements = 2;
+
+        public override int Get_Count()
+        {
+            return elements;
+        }
 
         public Lstruct2(Lelement first, Lelement second)
         {
@@ -229,16 +303,30 @@ namespace OOP2
             this.second = second;
         }
 
-        //что-то тлен
-
-        /*public override string Get()
+        public string Get(int i)
         {
-            return first.Get();
+            if (i == 0)
+            {
+                return first.Get();
+            }
+            else if (i == 1)
+            {
+                return second.Get();
+            }
+            return null;
         }
 
-        public string Get(bool t)
+        public string Get_Type(int i)
         {
-            return second.Get();
-        }*/
+            if (i == 0)
+            {
+                return first.Get_Type();
+            }
+            else if (i == 1)
+            {
+                return second.Get_Type();
+            }
+            return null;
+        }
     }
 }

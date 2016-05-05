@@ -105,6 +105,7 @@
             this.Extractbtn.TabIndex = 7;
             this.Extractbtn.Text = "Извлечь";
             this.Extractbtn.UseVisualStyleBackColor = true;
+            this.Extractbtn.Click += new System.EventHandler(this.Extractbtn_Click);
             // 
             // Statelabel
             // 
