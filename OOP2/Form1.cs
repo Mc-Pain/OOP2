@@ -25,16 +25,13 @@ namespace OOP2
                 return 0;
             if (a == "" && b != "")
             {
-                string c = b;
-                b = a;
-                a = c;
+                string c = First_textbox.Text;
+                First_textbox.Text = Second_textbox.Text;
+                Second_textbox.Text = c;
                 return 1;
             }
             if (b == "")
             {
-                string c = b;
-                b = a;
-                a = c;
                 return 1;
             }
             return 2;
@@ -127,11 +124,11 @@ namespace OOP2
             Statelabel.Text = "Извлеченные элементы:\n";
             if (current.Get_Count() == 1)
             {
-                Statelabel.Text += String.Format("{0}: {1}", current.Get_Type(), current.Get());
+                Statelabel.Text += String.Format("{0}: {1}\n", current.Get_Type(), current.Get());
             }
             if (current.Get_Count() == 2)
             {
-                Statelabel.Text += String.Format("{0}: {1}", current.Get_Type(0), current.Get(0));
+                Statelabel.Text += String.Format("{0}: {1}\n", current.Get_Type(0), current.Get(0));
                 Statelabel.Text += String.Format("{0}: {1}", current.Get_Type(1), current.Get(1));
             }
         }
@@ -144,12 +141,15 @@ namespace OOP2
     public abstract class Lall //абстрактный класс элементов и структур элементов
     {
         public abstract int Get_Count();
+        public abstract string Get(); //возвращает значение
+        public abstract string Get_Type();
+        public abstract string Get(int i); //возвращает значение
+        public abstract string Get_Type(int i);
     }
 
     public abstract class Lelement : Lall //абстрактный класс элемента контейнера - число либо строка
     {
-        public abstract string Get(); //возвращает значение
-        public abstract string Get_Type();
+
     }
 
     public abstract class Lnumber : Lelement //число - абстрактный класс. Мы не знаем, что там будет: int или double
@@ -171,6 +171,15 @@ namespace OOP2
         public override string Get_Type()
         {
             return type;
+        }
+
+        public override string Get_Type(int i)
+        {
+            return null;
+        }
+        public override string Get(int i) //Получение значения
+        {
+            return null;
         }
 
         public Lint() //нуль-конструктор
@@ -216,6 +225,15 @@ namespace OOP2
             return type;
         }
 
+        public override string Get_Type(int i)
+        {
+            return null;
+        }
+        public override string Get(int i) //Получение значения
+        {
+            return null;
+        }
+
         public Ldouble() //нуль-конструктор
         {
             this.number = 0;
@@ -247,7 +265,7 @@ namespace OOP2
     {
         string text;
         int elements = 1;
-        string type = "Строка:";
+        string type = "Строка";
 
         public override int Get_Count()
         {
@@ -257,6 +275,15 @@ namespace OOP2
         public override string Get_Type()
         {
             return type;
+        }
+
+        public override string Get_Type(int i)
+        {
+            return null;
+        }
+        public override string Get(int i) //Получение значения
+        {
+            return null;
         }
 
         public Lstring() //конструктор по умолчанию
@@ -303,7 +330,16 @@ namespace OOP2
             this.second = second;
         }
 
-        public string Get(int i)
+        public override string Get_Type()
+        {
+            return null;
+        }
+        public override string Get() //Получение значения
+        {
+            return null;
+        }
+
+        public override string Get(int i)
         {
             if (i == 0)
             {
@@ -316,7 +352,7 @@ namespace OOP2
             return null;
         }
 
-        public string Get_Type(int i)
+        public override string Get_Type(int i)
         {
             if (i == 0)
             {
